@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow:
+
+Sitemap: https://open-respons.no/sitemap.xml

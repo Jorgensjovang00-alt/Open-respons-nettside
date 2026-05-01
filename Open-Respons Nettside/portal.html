@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html lang="no">
+	<head>
+		<title>Anbudsportal - Open-Respons AS</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Anbudsportal for stasjonær vektertjeneste. Kunder legger ut oppdrag, vekterselskaper sender inn anbud." />
+		<meta name="robots" content="noindex,nofollow" />
+
+		<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
+		<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,600,600italic" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/portal.css?v=1" />
+	</head>
+	<body class="portal">
+
+		<div class="portal-shell">
+
+			<!-- Header -->
+				<header class="portal-header">
+					<a href="index.html" class="portal-brand">
+						<img src="images/logo.png" alt="Open-Respons AS logo" />
+						<span class="portal-brand-text">
+							<strong>Open-Respons</strong>
+							<span>Anbudsportal</span>
+						</span>
+					</a>
+					<div class="portal-session" id="portal-session">
+						<!-- Populated by portal.js -->
+					</div>
+				</header>
+
+			<!-- Flash region -->
+				<div id="portal-flash" aria-live="polite"></div>
+
+			<!-- Landing: pålogging -->
+				<section class="portal-view" id="view-landing" data-view="landing">
+
+					<!-- Vekter-pålogging (liten klikkbar boks i hjørnet) -->
+					<a href="#vekter-login" class="portal-vekter-corner" aria-label="Logg inn som vekterselskap">
+						<span class="portal-vekter-corner-eyebrow">For vekterselskap</span>
+						<span class="portal-vekter-corner-title">Vekterselskap</span>
+						<span class="portal-vekter-corner-desc">Logg inn for &aring; se &aring;pne oppdrag</span>
+						<span class="portal-vekter-corner-cta">Logg inn &rarr;</span>
+					</a>
+
+					<!-- Kunde-pålogging (sentral, hovedfokus) -->
+					<div class="portal-landing-main">
+						<div class="portal-landing-intro">
+							<h1>Velkommen til anbudsportalen</h1>
+							<p>Legg ut oppdrag for stasjon&aelig;r vektertjeneste og motta lukkede anbud fra kvalifiserte vekterselskaper.</p>
+							<p><small>Demoversjon — data lagres lokalt i nettleseren din.</small></p>
+						</div>
+
+						<form class="portal-role-card portal-card-large" id="form-role-kunde" novalidate>
+							<h2>Jeg er kunde</h2>
+							<p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5rem;">Logg inn eller opprett konto for &aring; legge ut oppdrag.</p>
+
+							<div class="portal-toggle-group" role="radiogroup" aria-label="Kundetype">
+								<label class="portal-toggle-option">
+									<input type="radio" name="kundeType" value="privat" checked />
+									<span>Privat</span>
+								</label>
+								<label class="portal-toggle-option">
+									<input type="radio" name="kundeType" value="bedrift" />
+									<span>Bedrift</span>
+								</label>
+							</div>
+
+							<div class="fields">
+								<div class="field half">
+									<label for="kunde-brukernavn">Brukernavn</label>
+									<input type="text" id="kunde-brukernavn" name="brukernavn" autocomplete="username" required />
+								</div>
+								<div class="field half">
+									<label for="kunde-passord">Passord</label>
+									<input type="password" id="kunde-passord" name="passord" autocomplete="current-password" required />
+								</div>
+
+								<!-- Bedrift-felt: vises kun nar Bedrift er valgt -->
+								<div class="field half" data-kundetype="bedrift" hidden>
+									<label for="kunde-orgnr">Organisasjonsnummer</label>
+									<input type="text" id="kunde-orgnr" name="orgnr" inputmode="numeric" autocomplete="off" />
+								</div>
+								<div class="field half" data-kundetype="bedrift" hidden>
+									<label for="kunde-epost">E-post</label>
+									<input type="email" id="kunde-epost" name="epost" autocomplete="email" />
+								</div>
+								<div class="field" data-kundetype="bedrift" hidden>
+									<label for="kunde-telefon">Telefon</label>
+									<input type="tel" id="kunde-telefon" name="telefon" autocomplete="tel" />
+								</div>
+							</div>
+
+							<div class="form-error" id="kunde-form-error" hidden></div>
+							<div class="form-actions form-actions-split">
+								<button type="submit" class="button" data-mode="login">Logg inn</button>
+								<button type="submit" class="button" data-mode="register">Registrer</button>
+							</div>
+						</form>
+
+						<div class="portal-landing-footer">
+							<button type="button" class="button small" id="btn-seed-demo">Last inn demo-data</button>
+							<p><small>Seeder ett demo-oppdrag s&aring; du kan teste flyten end-to-end.</small></p>
+						</div>
+					</div>
+				</section>
+
+			<!-- Vekter-pålogging (egen side) -->
+				<section class="portal-view" id="view-vekter-login" data-view="vekter-login">
+					<a href="#" class="portal-back">Tilbake til hovedsiden</a>
+					<div class="portal-login-wrap">
+						<form class="portal-role-card portal-card-large" id="form-role-vekter" novalidate>
+							<h2>Logg inn som vekterselskap</h2>
+							<p style="color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; text-align: center;">Logg inn med vekterselskap-konto, eller opprett ny konto ved &aring; fylle inn feltene under.</p>
+							<div class="fields">
+								<div class="field">
+									<label for="vekter-firma">Vekterselskap</label>
+									<input type="text" id="vekter-firma" name="firma" autocomplete="organization" required />
+								</div>
+								<div class="field half">
+									<label for="vekter-brukernavn">Brukernavn</label>
+									<input type="text" id="vekter-brukernavn" name="brukernavn" autocomplete="username" required />
+								</div>
+								<div class="field half">
+									<label for="vekter-passord">Passord</label>
+									<input type="password" id="vekter-passord" name="passord" autocomplete="current-password" required />
+								</div>
+							</div>
+							<div class="form-error" id="vekter-form-error" hidden></div>
+							<div class="form-actions form-actions-split">
+								<button type="submit" class="button" data-mode="login">Logg inn</button>
+								<button type="submit" class="button" data-mode="register">Registrer</button>
+							</div>
+						</form>
+					</div>
+				</section>
+
+			<!-- Kunde dashboard -->
+				<section class="portal-view" id="view-kunde" data-view="kunde" data-required-role="kunde">
+					<div class="portal-box-header" style="border-bottom: none; margin-bottom: 1.5rem;">
+						<div>
+							<h1>Mine oppdrag</h1>
+							<p style="margin: 0; color: rgba(255,255,255,0.7);">Oversikt over oppdrag du har lagt ut.</p>
+						</div>
+						<div class="portal-box-actions">
+							<a href="#kunde/ny" class="button primary">+ Nytt oppdrag</a>
+						</div>
+					</div>
+					<div class="portal-box">
+						<div id="kunde-oppdrag-liste"></div>
+					</div>
+				</section>
+
+			<!-- Kunde: nytt oppdrag -->
+				<section class="portal-view" id="view-kunde-ny" data-view="kunde-ny" data-required-role="kunde">
+					<a href="#kunde" class="portal-back">Tilbake til mine oppdrag</a>
+					<div class="portal-box">
+						<div class="portal-box-header">
+							<h2>Nytt oppdrag</h2>
+						</div>
+						<form id="form-nytt-oppdrag" novalidate>
+							<div class="fields">
+								<div class="field">
+									<label for="opp-tittel">Tittel</label>
+									<input type="text" id="opp-tittel" name="tittel" required maxlength="120" />
+								</div>
+								<div class="field half">
+									<label for="opp-type">Type oppdrag</label>
+									<select id="opp-type" name="type" required>
+										<option value="stasjonaer">Stasjon&aelig;r vekter</option>
+										<option value="patrulje">Patruljerende vekter</option>
+										<option value="arrangement">Arrangement / event</option>
+									</select>
+								</div>
+								<div class="field half">
+									<label for="opp-antall">Antall vektere</label>
+									<input type="number" id="opp-antall" name="antallVektere" min="1" max="50" value="1" required />
+								</div>
+								<div class="field">
+									<label for="opp-adresse">Adresse</label>
+									<input type="text" id="opp-adresse" name="adresse" required maxlength="200" />
+								</div>
+								<div class="field half">
+									<label for="opp-startdato">Startdato</label>
+									<input type="date" id="opp-startdato" name="startDato" required />
+								</div>
+								<div class="field half">
+									<label for="opp-sluttdato">Sluttdato</label>
+									<input type="date" id="opp-sluttdato" name="sluttDato" required />
+								</div>
+								<div class="field half">
+									<label for="opp-starttid">Starttid</label>
+									<input type="time" id="opp-starttid" name="startTid" required />
+								</div>
+								<div class="field half">
+									<label for="opp-sluttid">Sluttid</label>
+									<input type="time" id="opp-sluttid" name="sluttTid" required />
+								</div>
+								<div class="field">
+									<label>Krav til vekter</label>
+									<div class="checkbox-grid">
+										<label class="checkbox-item"><input type="checkbox" name="krav-uniformert" /> Uniformert</label>
+										<label class="checkbox-item"><input type="checkbox" name="krav-sertifisert" /> Sertifisert (vekterskolen)</label>
+										<label class="checkbox-item"><input type="checkbox" name="krav-hund" /> Med hund</label>
+										<label class="checkbox-item"><input type="checkbox" name="krav-kjoretoy" /> Med kj&oslash;ret&oslash;y</label>
+										<label class="checkbox-item"><input type="checkbox" name="krav-forstehjelp" /> F&oslash;rstehjelpskurs</label>
+									</div>
+								</div>
+								<div class="field">
+									<label>Spr&aring;kkrav</label>
+									<div class="checkbox-grid">
+										<label class="checkbox-item"><input type="checkbox" name="sprak-nb" checked /> Norsk</label>
+										<label class="checkbox-item"><input type="checkbox" name="sprak-en" /> Engelsk</label>
+									</div>
+								</div>
+								<div class="field half">
+									<label for="opp-budsjett">Budsjett maks (NOK/time, valgfritt)</label>
+									<input type="number" id="opp-budsjett" name="budsjettMaks" min="0" step="10" />
+								</div>
+								<div class="field">
+									<label for="opp-beskrivelse">Beskrivelse</label>
+									<textarea id="opp-beskrivelse" name="beskrivelse" rows="4" required maxlength="2000"></textarea>
+								</div>
+								<div class="field">
+									<label for="opp-notat">Internt notat (valgfritt)</label>
+									<textarea id="opp-notat" name="notat" rows="2" maxlength="500"></textarea>
+								</div>
+							</div>
+							<div class="form-error" id="ny-oppdrag-error" hidden></div>
+							<div class="form-actions">
+								<button type="submit" class="button primary">Publiser oppdrag</button>
+								<a href="#kunde" class="button">Avbryt</a>
+							</div>
+						</form>
+					</div>
+				</section>
+
+			<!-- Kunde: oppdrag detalj -->
+				<section class="portal-view" id="view-kunde-oppdrag" data-view="kunde-oppdrag" data-required-role="kunde">
+					<a href="#kunde" class="portal-back">Tilbake til mine oppdrag</a>
+					<div id="kunde-oppdrag-detalj"></div>
+				</section>
+
+			<!-- Vekter dashboard -->
+				<section class="portal-view" id="view-vekter" data-view="vekter" data-required-role="vekter">
+					<div class="portal-box-header" style="border-bottom: none; margin-bottom: 1.5rem;">
+						<div>
+							<h1>Vekter-portal</h1>
+							<p style="margin: 0; color: rgba(255,255,255,0.7);">Bla i tilgjengelige oppdrag og send inn anbud.</p>
+						</div>
+					</div>
+
+					<div class="portal-tabs" role="tablist">
+						<button class="portal-tab is-active" data-tab="apne" role="tab">Tilgjengelige oppdrag</button>
+						<button class="portal-tab" data-tab="mine" role="tab">Mine anbud</button>
+					</div>
+
+					<div class="portal-tab-panel is-active" data-panel="apne">
+						<div class="portal-box">
+							<div id="vekter-apne-liste"></div>
+						</div>
+					</div>
+					<div class="portal-tab-panel" data-panel="mine">
+						<div class="portal-box">
+							<div id="vekter-mine-liste"></div>
+						</div>
+					</div>
+				</section>
+
+			<!-- Vekter: oppdrag detalj -->
+				<section class="portal-view" id="view-vekter-oppdrag" data-view="vekter-oppdrag" data-required-role="vekter">
+					<a href="#vekter" class="portal-back">Tilbake til vekter-portal</a>
+					<div id="vekter-oppdrag-detalj"></div>
+				</section>
+
+			<!-- Footer -->
+				<footer class="portal-footer">
+					<p>&copy; Open-Respons AS &middot; <a href="index.html">Tilbake til hovedsiden</a> &middot; <a href="personvern.html">Personvern</a></p>
+				</footer>
+
+		</div>
+
+		<script src="assets/js/portal.js?v=1"></script>
+	</body>
+</html>

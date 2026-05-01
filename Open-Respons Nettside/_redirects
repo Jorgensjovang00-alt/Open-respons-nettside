@@ -1,0 +1,4 @@
+# Force HTTPS and www redirect
+http://open-respons.no/* https://open-respons.no/:splat 301!
+http://www.open-respons.no/* https://open-respons.no/:splat 301!
+https://www.open-respons.no/* https://open-respons.no/:splat 301!
